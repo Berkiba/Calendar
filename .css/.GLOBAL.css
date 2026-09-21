@@ -1,0 +1,10 @@
+:root {
+	--backgroundColor0: #6C584C;
+	--backgroundColor1: #A98467;
+	--backgroundColor2: #ABA370;
+	--fontColor0: #dde5b6;
+	--fontColor1: #E7E8C4;
+	--fontColor2: #f0ead2;
+	color: var(--fontColor0, black);
+	background-color: var(--backgroundColor0);
+}
