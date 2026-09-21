@@ -1,0 +1,15 @@
+ nav.side-bar {
+ 	display: flex;
+ 	flex-direction: column;
+ 	position: fixed;
+ 	top: 0;
+ 	left: 0;
+ 	height: 100vh;
+ 	border: 1vh solid black;
+ 	background-color: gray;
+ }
+
+ nav.side-bar a {
+ 	font-size: 5vh;
+ 	min-width: 20vw;
+ }
