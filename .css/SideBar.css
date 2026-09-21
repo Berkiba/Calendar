@@ -1,0 +1,91 @@
+/********************************************************************
+* Description: 
+* 			The side-bar that has the slider animation.
+********************************************************************/
+nav.side-bar {
+	--width: 20vw;
+	--animationInterval: 0.3s;
+	display: flex;
+	flex-direction: column;
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100vh;
+	border: 1vh solid var(--fontColor0, black);
+	background-color: var(--backgroundColor1, gray);
+	overflow-x: hidden;
+	user-select: none;
+	width: var(--width);
+	transition:
+		width var(--animationInterval) linear;
+}
+
+nav.side-bar.hidden {
+	width: calc(var(--width) / 4);
+}
+
+/********************************************************************
+* Description: 
+* 			The clickable links inside the side-bar.
+********************************************************************/
+nav.side-bar a {
+	color: var(--fontColor0, black);
+	font-size: 5vh;
+	min-width: var(--width);
+	transition:
+		width var(--animationInterval) linear,
+		opacity var(--animationInterval) linear,
+		transform var(--animationInterval) linear;
+}
+
+nav.side-bar.hidden a {
+	pointer-events: none;
+	opacity: 0%;
+	transform: translate(-75%);
+}
+
+/********************************************************************
+* Description: 
+* 			The background BEHIND the side-bar.
+* Usage:
+* 			When the user clicks on it, it folds the side-bar.
+********************************************************************/
+nav.side-bar.background {
+	transform: skewX(0deg);
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: var(--fontColor1, gray);
+	pointer-events: all;
+	opacity: 30%;
+	transition:
+		opacity var(--animationInterval) linear;
+}
+
+nav.side-bar.background.hidden {
+	pointer-events: none;
+	opacity: 0%;
+}
+
+/********************************************************************
+* Description: 
+* 			The arrow shows on the side-bar when folded.
+********************************************************************/
+nav.side-bar .arrow {
+	color: var(--fontColor0, black);
+	position: fixed;
+	top: 20vh;
+	font-size: calc(var(--width) / 2);
+	transform: translateX(-50%);
+	opacity: 0%;
+	transition:
+		transform var(--animationInterval) linear,
+		opacity var(--animationInterval) linear;
+}
+
+nav.side-bar.hidden .arrow {
+	transform: translateX(-0%);
+	opacity: 100%;
+}
