@@ -5,7 +5,7 @@ A school project about building myself a calendar for assignmnets
 # Members
 |Name|Responsible For|
 |-|-|
-|Berk|| `Calendar logic implementation`
+|Berk|| Calendar
 |Josef||
 |Yuze|~~`EASY_REACT_COMPONENT`~~ `Home` `SideBar` |
 
