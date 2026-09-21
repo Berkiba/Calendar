@@ -7,7 +7,7 @@ A school project about building myself a calendar for assignmnets
 |-|-|
 |Berk||
 |Josef||
-|Yuze|`EASY_REACT_COMPONENT`|
+|Yuze|~~`EASY_REACT_COMPONENT`~~ `Home` `SideBar` |
 
 * ~~Compnent~~ This font style means once created, but deleted afterward during development.
 * `.index.tsx` and `index.html` will not be counted.
