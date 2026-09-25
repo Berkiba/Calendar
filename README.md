@@ -1,13 +1,14 @@
 # Calendar
 A school project about building myself a calendar for assignmnets
 # Command Reminder
+`npx nodemon --exec tsx .\server.ts` backend.
 `npx vite` - for viewing/debugging the website locally.
 # Members
-|Name|Responsible For|
-|-|-|
-|Berk||
-|Josef||
-|Yuze|~~`EASY_REACT_COMPONENT`~~ `Home` `SideBar` |
+|Name|Components|Services|Types/Interfaces|APIs|
+|-|-|-|-|-|
+|Berk|||||
+|Josef|||||
+|Yuze|~~`EASY_REACT_COMPONENT`~~ `Home` `SideBar` |`Database` `MongoDB`|`IDatabase`|`Search`|
 
 * ~~Compnent~~ This font style means once created, but deleted afterward during development.
 * `.index.tsx` and `index.html` will not be counted.
