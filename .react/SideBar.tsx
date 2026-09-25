@@ -22,8 +22,8 @@ export default function Component() {
 	}
 	return (
 		<>
-			<nav ref={backgroundRef} className="side-bar background" onClick={BackgroundOnClick}></nav>
-			<nav ref={sideBarRef} className="side-bar" onClick={SideBarOnClick}>
+			<nav ref={backgroundRef} className="side-bar hidden background" onClick={BackgroundOnClick}></nav>
+			<nav ref={sideBarRef} className="side-bar hidden" onClick={SideBarOnClick}>
 				<p className="arrow">{">"}</p>
 				<Link to="/">Home</Link>
 				<Link to="/">PLACE_HOLDER</Link>
