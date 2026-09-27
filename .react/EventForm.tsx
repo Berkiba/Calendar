@@ -25,6 +25,7 @@ export default function EventForm(){
     function handleSubmit(event: React.SubmitEvent<HTMLFormElement>){
         event.preventDefault();
 
+        //create one event object
         const newEvent = {
             title,
             date,
@@ -39,6 +40,7 @@ export default function EventForm(){
     }
 
     return(
+        // main container for event form
         <Box
             sx={{
                 ml:    "22vw",
@@ -46,13 +48,16 @@ export default function EventForm(){
                 maxWidth: 700,
             }}
         >
+            {/*Card container around form*/}
             <Paper elevation={3} sx = {{ p: 4 }}>
+                {/*Page title*/}
                 <Typography variant="h4" component="h1" gutterBottom>
                     Create Event
                 </Typography>
-
+                {/*Form container*/}
                 <Box component = "form" onSubmit={handleSubmit}>
                     <Stack spacing = {3}>
+                        {/*Each text field (event title, date, time, location, description)*/}
                         <TextField
                             label       = "Event title"
                             value       = {title}
@@ -118,7 +123,7 @@ export default function EventForm(){
                             minRows     = {4}
                             fullWidth
                         />
-
+                        {/*Submit button*/}
                         <Button
                             type        = "submit"
                             variant     = "contained"
