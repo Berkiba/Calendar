@@ -52,7 +52,7 @@ nav.side-bar.hidden a {
 ********************************************************************/
 nav.side-bar.background {
 	transform: skewX(0deg);
-	position: absolute;
+	position: flex;
 	top: 0;
 	left: 0;
 	width: 100vw;

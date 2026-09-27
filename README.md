@@ -7,7 +7,7 @@ A school project about building myself a calendar for assignmnets
 |Name|Components|Services|Types/Interfaces|APIs|
 |-|-|-|-|-|
 |Berk|Calendar||||
-|Josef|||||
+|Josef|`Event Form` `Event Details`||||
 |Yuze|~~`EASY_REACT_COMPONENT`~~ `Home` `SideBar` |`Database` `MongoDB`|`IDatabase`|`Search`|
 
 * ~~Compnent~~ This font style means once created, but deleted afterward during development.
