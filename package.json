@@ -1,7 +1,13 @@
 {
+	"type": "module",
 	"dependencies": {
+		"@types/express": "^5.0.6",
 		"@types/react": "^19.3.0",
 		"@types/react-dom": "^19.3.0",
+		"@types/react-router-dom": "^5.3.3",
+		"express": "^5.2.1",
+		"nodemon": "^3.1.14",
+		"tsx": "^4.23.15",
 		"react": "^19.3.0",
 		"react-dom": "^19.3.0",
 		"react-router-dom": "^7.18.4",
