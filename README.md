@@ -1,12 +1,13 @@
 # Calendar
 A school project about building myself a calendar for assignmnets
 # Command Reminder
-`npx nodemon --exec tsx .\server.ts` backend.
-`npx vite` - for viewing/debugging the website locally.
+* `npx nodemon --exec tsx .\server.ts` - backend.
+* `npx vite` - for viewing/debugging the frontend locally.
+* `./RUN.ps1` - the powershell script for Windows user to start two servers at the same time.
 # Members
 |Name|Components|Services|Types/Interfaces|APIs|
 |-|-|-|-|-|
-|Berk|Calendar||||
+|Berk|`Calendar`||||
 |Josef|`Event Form` `Event Details`||||
 |Yuze|~~`EASY_REACT_COMPONENT`~~ `Home` `SideBar` |`Database` `MongoDB`|`IDatabase`|`Search`|
 
