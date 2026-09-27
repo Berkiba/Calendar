@@ -6,7 +6,7 @@ A school project about building myself a calendar for assignmnets
 # Members
 |Name|Components|Services|Types/Interfaces|APIs|
 |-|-|-|-|-|
-|Berk|Calendar||||
+|Berk|`Calendar`||||
 |Josef|`Event Form` `Event Details`||||
 |Yuze|~~`EASY_REACT_COMPONENT`~~ `Home` `SideBar` |`Database` `MongoDB`|`IDatabase`|`Search`|
 
