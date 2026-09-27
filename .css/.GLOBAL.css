@@ -7,4 +7,6 @@
 	--fontColor2: #f0ead2;
 	color: var(--fontColor0, black);
 	background-color: var(--backgroundColor0);
+
+	--pos-left: 6vw;
 }
