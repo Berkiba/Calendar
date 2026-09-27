@@ -4,19 +4,19 @@ import EventForm from "../EventForm";
 import EventDetails from "../EventDetails";
 
 export default createBrowserRouter([{
-			path: "/",
-			Component: Home,
-			children: [
-				{
-					path: "events/new",
-					Component: EventForm,
-				},
-				{
-					path: "events/:eventId",
-					Component: EventDetails,
-				},
-			],
+	path: "/",
+	Component: Home,
+	children: [
+		{
+			path: "events/new",
+			Component: EventForm,
+		},
+		{
+			path: "events/:eventId",
+			Component: EventDetails,
 		},
 	],
+}
+],
 
 );
