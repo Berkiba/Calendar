@@ -26,12 +26,11 @@ export default function Component() {
 			<nav ref={sideBarRef} className="side-bar hidden" onClick={SideBarOnClick}>
 				<p className="arrow">{">"}</p>
 				<Link to="/">Home</Link>
-				<Link to="/">PLACE_HOLDER</Link>
+				<Link to="/events/new">New Event</Link>
 				<Link to="/">PLACE_HOLDER</Link>
 				<Link to="/">PLACE_HOLDER</Link>
 				<Link to="/">PLACE_HOLDER</Link>
 			</nav>
-			<Outlet></Outlet>
 		</>
 	);
 }
