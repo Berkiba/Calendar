@@ -3,18 +3,20 @@ import "../.css/.GLOBAL.css";
 import React, { useState, useEffect } from "react";
 import { Link, Outlet } from "react-router-dom"
 import SideBar from "./SideBar.tsx"
-import SearchReturnType from "../.type/Search.ts"
+import type SearchReturnType from "../.type/Search.ts"
 
 
-
+/**
+ * Currently will just fetching the search api without having search parameters.
+ * @returns Home page as React component.
+ */
 export default function Component() {
-	const [searchResult, setSearchResult] = useState(null);
+	const [searchResult, setSearchResult] = useState<SearchReturnType>();
 	useEffect(() => {
 		async function getSearch() {
 			console.log("the fetch starts");
 			const response = await fetch("/api/search");
-			const json = await response.json();
-			setSearchResult(json.data)
+			setSearchResult(await response.json());
 			console.log("the fetch works");
 		}
 		getSearch();
@@ -24,7 +26,7 @@ export default function Component() {
 			<SideBar></SideBar>
 			<nav style={{ marginLeft: "var(--pos-left)" }}>
 				<h1>Empty Home</h1>
-				<h1>Search API returns: {searchResult}</h1>
+				<h1>Search API returns: {searchResult?.data}</h1>
 			</nav >
 			<Outlet></Outlet>
 		</nav >

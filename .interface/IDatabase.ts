@@ -1,3 +1,7 @@
+/**
+ * @interface
+ * 			A concreate database depencensy must fullfill this requirement.
+ */
 export default interface IDatabase<K, D> {
 	Get: (key: K) => D | undefined;
 	GetAll: (key: K) => D[] | undefined;

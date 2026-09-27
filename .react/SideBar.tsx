@@ -4,14 +4,24 @@ import "../.css/SideBar.css";
 import React, { useRef } from "react";
 import { Link, Outlet } from "react-router-dom";
 
+/** 
+ * Foldable, expandable side bar.
+ * @returns Side bar react component.
+*/
 export default function Component() {
 	const sideBarRef = useRef<HTMLElement>(null);
 	const backgroundRef = useRef<HTMLElement>(null);
+
+	// Sync toggle.
 	function helperToggle() {
 		sideBarRef.current?.classList.toggle("hidden");
 		backgroundRef.current?.classList.toggle("hidden");
-
 	}
+
+	// Event handler for mouse clicks.
+	// One for expanding.
+	// One for folding.
+	// Different places to click.
 	function SideBarOnClick() {
 		if (sideBarRef.current?.classList.contains("hidden"))
 			helperToggle();

@@ -8,5 +8,6 @@
 	color: var(--fontColor0, black);
 	background-color: var(--backgroundColor0);
 
+	/* Use for align with the SideBar component. */
 	--pos-left: 6vw;
 }
