@@ -10,7 +10,7 @@ import type SearchReturnType from "../../.model/.type/Search.ts"
  * Currently will just fetching the search api without having search parameters.
  * @returns Home page as React component.
  */
-export default function Component() {
+export default function Home() {
 	const [searchResult, setSearchResult] = useState<SearchReturnType>();
 	useEffect(() => {
 		async function getSearch() {
