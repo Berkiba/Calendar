@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
-import type SearchReturnType from "../.type/Search.ts";
-import Database from "../.service/Database.ts";
-import MongoDB from "../.service/.concrete/MongoDB.ts";
+import type SearchReturnType from "../../.model/.type/Search.ts";
+import Database from "../../.model/.service/Database.ts";
+import MongoDB from "../../.model/.service/.concrete/MongoDB.ts";
 
 const database = new Database(new MongoDB);
 

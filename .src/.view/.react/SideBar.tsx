@@ -8,7 +8,7 @@ import { Link, Outlet } from "react-router-dom";
  * Foldable, expandable side bar.
  * @returns Side bar react component.
 */
-export default function Component() {
+export default function SideBar() {
 	const sideBarRef = useRef<HTMLElement>(null);
 	const backgroundRef = useRef<HTMLElement>(null);
 

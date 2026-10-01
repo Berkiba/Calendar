@@ -3,14 +3,14 @@ import "../.css/.GLOBAL.css";
 import React, { useState, useEffect } from "react";
 import { Link, Outlet } from "react-router-dom"
 import SideBar from "./SideBar.tsx"
-import type SearchReturnType from "../.type/Search.ts"
+import type SearchReturnType from "../../.model/.type/Search.ts"
 
 
 /**
  * Currently will just fetching the search api without having search parameters.
  * @returns Home page as React component.
  */
-export default function Component() {
+export default function Home() {
 	const [searchResult, setSearchResult] = useState<SearchReturnType>();
 	useEffect(() => {
 		async function getSearch() {
