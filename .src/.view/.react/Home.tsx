@@ -3,7 +3,7 @@ import "../.css/.GLOBAL.css";
 import React, { useState, useEffect } from "react";
 import { Link, Outlet } from "react-router-dom"
 import SideBar from "./SideBar.tsx"
-import type SearchReturnType from "../.type/Search.ts"
+import type SearchReturnType from "../../.model/.type/Search.ts"
 
 
 /**
