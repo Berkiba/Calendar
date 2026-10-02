@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
-import "../.css/.GLOBAL.css";
-import "../.css/SideBar.css";
+import "../css/.GLOBAL.css";
+import "../css/SideBar.css";
 import React, { useRef } from "react";
 import { Link, Outlet } from "react-router-dom";
 
