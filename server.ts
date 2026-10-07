@@ -6,7 +6,7 @@ const server = express();
 // @ts-ignore
 import cors from "cors"
 const coursOptions = {
-	origin: ["http://localhost:5173"],
+	origin: [`${process.env.url}:${process.env.portF}`],
 }
 
 // registera middleware.
