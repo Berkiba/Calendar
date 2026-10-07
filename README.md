@@ -1,7 +1,7 @@
 # Calendar
 A school project about building myself a calendar for assignmnets
 # Command Reminder
-* `npx nodemon --exec tsx .\server.ts` - backend.
+* `npx nodemon --exec "node --env-file=.env --import=tsx" .\server.ts` - backend.
 * `npx vite` - for viewing/debugging the frontend locally.
 * `./RUN.ps1` - the powershell script for Windows user to start two servers at the same time.
 # Members
