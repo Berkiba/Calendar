@@ -5,11 +5,11 @@ A school project about building myself a calendar for assignmnets
 * `npx vite` - for viewing/debugging the frontend locally.
 * `./RUN.ps1` - the powershell script for Windows user to start two servers at the same time.
 # Members
-|Name|Components|Services|Types/Interfaces|APIs|
+|Name|View|Model|Types/Interfaces|Controller|
 |-|-|-|-|-|
 |Berk|`Calendar`||||
 |Josef|`Event Form` `Event Details`||||
-|Yuze|~~`EASY_REACT_COMPONENT`~~ `Home` `SideBar` |`Database` `MongoDB`|`IDatabase`|`Search`|
+|Yuze|~~`EASY_REACT_COMPONENT`~~ `Home` `SideBar` |~~`Database`~~ `MongoDB` `RepositoryDataWebsiteVisitCounter` `RepositoryManager` |~~`IDatabase`~~ `IRepositoryData`|~~`Search`~~ `LoadWebsiteVisitCounter`|
 
 * ~~Compnent~~ This font style means once created, but deleted afterward during development.
 * `.index.tsx` and `index.html` will not be counted.
