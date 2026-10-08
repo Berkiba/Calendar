@@ -2,7 +2,7 @@ import IRepositoryData from "../interface/IRepositoryData.ts"
 import db from "../repository/MongoDB.ts"
 
 const _global_key = { name: "visit_count" };
-const _collection = db?.collection("data");
+const _collection = db?.collection("Data");
 
 export default class RepositoryDataWebsiteVisitCounter implements IRepositoryData<string, number> {
 	async Get(k: string): Promise<number | undefined> {

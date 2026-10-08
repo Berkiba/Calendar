@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb';
-const client = new MongoClient(`${process.env.MONGODB_URI}`);
-export const db = (await connectToMongoDB())?.db(`${process.env.database}`);
+const client = new MongoClient(`${process.env.db_url}`);
+export const db = (await connectToMongoDB())?.db(`${process.env.db_database}`);
 export default db;
 
 /////////////////////////////////////////////////////////////////
@@ -26,8 +26,10 @@ export async function disconnectFromMongoDB() {
 
 process.on("SIGINT", async () => {
 	await disconnectFromMongoDB();
+	process.exit(0);
 });
 
 process.on("SIGTERM", async () => {
 	await disconnectFromMongoDB();
+	process.exit(0);
 });
