@@ -49,15 +49,21 @@ const events = [
 	}
 ];
 
-server.post("/api/website-visit-counter", async (req, res) => {
+server.post("/api/website-visit-counter", async (_req, res) => {
 	const number = await repository_manager.website_visit_counter.Get("");
-	if (number != undefined)
-		await repository_manager.website_visit_counter.Set("", number + 1);
+	// edge case whe the counter not found/exist in the database.
+	if (number === undefined) {
+		res.sendStatus(404).json({ error: "Counter not found somehow haha." });
+		return;
+	}
+	// no more worries.
+	await repository_manager.website_visit_counter.Set("", number + 1);
+	res.sendStatus(204); // 204 mean success with no response data.
 });
 
-server.get("/api/website-visit-counter", async (req, res) => {
+server.get("/api/website-visit-counter", async (_req, res) => {
 	const number = await repository_manager.website_visit_counter.Get("");
-	return res.json({ data: number });
+	res.json({ data: number });
 });
 
 server.get("/events", (req, res) => { // mock.
