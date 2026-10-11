@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 import "../css/.GLOBAL.css";
-import React, { useState, useEffect } from "react";
-import { Link, Outlet } from "react-router-dom"
+import { useState, useEffect } from "react";
+import { Outlet } from "react-router-dom"
 import SideBar from "./SideBar.tsx"
 import { LoadWebsiteVisitCounter, PostWebsiteVisitCounter } from "../../controller/LoadWebsiteVisitCounter.ts"
 
