@@ -8,6 +8,7 @@ import cors from "cors"
 const coursOptions = {
 	origin: ["http://localhost:5173"],
 }
+import repository_manager from "./src/model/service/RepositoryManager.ts"
 
 // registera middleware.
 server.use(cors(coursOptions));
@@ -48,8 +49,15 @@ const events = [
 	}
 ];
 
-server.get("/api/search", (req, res) => {
-	return res.json("Something, new search api.");
+server.post("/api/website-visit-counter", async (req, res) => {
+	const number = await repository_manager.website_visit_counter.Get("");
+	if (number != undefined)
+		await repository_manager.website_visit_counter.Set("", number + 1);
+});
+
+server.get("/api/website-visit-counter", async (req, res) => {
+	const number = await repository_manager.website_visit_counter.Get("");
+	return res.json({ data: number });
 });
 
 server.get("/events", (req, res) => { // mock.
