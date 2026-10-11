@@ -3,7 +3,6 @@ dotenv.config();
 
 import express from "express";
 const server = express();
-// @ts-ignore
 import cors from "cors"
 const coursOptions = {
 	origin: [`${process.env.url}:${process.env.portF}`],
