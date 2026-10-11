@@ -1,4 +1,3 @@
-import type { LoaderFunctionArgs } from "react-router-dom";
 import axios from "axios"
 
 /**
