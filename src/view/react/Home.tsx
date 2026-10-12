@@ -1,9 +1,11 @@
 /// <reference types="vite/client" />
 import "../css/.GLOBAL.css";
-import React, { useState, useEffect } from "react";
-import { Link, Outlet } from "react-router-dom"
+import { useState, useEffect } from "react";
+import { Outlet } from "react-router-dom"
 import SideBar from "./SideBar.tsx"
 import { LoadWebsiteVisitCounter, PostWebsiteVisitCounter } from "../../controller/LoadWebsiteVisitCounter.ts"
+import axios from "axios";
+import AccountManager from "../../controller/AccountManager.ts"
 
 
 /**
@@ -20,12 +22,33 @@ export default function Home() {
 		// also increase the counter.
 		PostWebsiteVisitCounter();
 	}, []);
+
+	// test mongodb
+	const [account, setAccount] = useState<AccountManager>(() => new AccountManager({ name: "test_name", email: "test_email@ju.se", password: "test_password" }));
+	const OnPressRegister = async () => {
+		try {
+			await account.Register();
+		}
+		catch (error) {
+			console.error(error);
+		}
+	}
+	const OnPressAccess = async () => {
+		try {
+			await account.Login();
+		}
+		catch (error) {
+			console.error(error);
+		}
+	}
 	return (
 		<nav className="Home">
 			<SideBar></SideBar>
 			<nav style={{ marginLeft: "var(--pos-left)" }}>
 				<h1>Empty Home</h1>
 				<h1>Today Activity Count: {searchResult}</h1>
+				<button onClick={OnPressRegister}>Create mock account</button>
+				<button onClick={OnPressAccess}>Access mock account</button>
 			</nav >
 			<Outlet></Outlet>
 		</nav >

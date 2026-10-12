@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import express from "express";
+import express, { response } from "express";
 const server = express();
 // @ts-ignore
 import cors from "cors"
@@ -9,9 +9,11 @@ const coursOptions = {
 	origin: [`${process.env.url}:${process.env.portF}`],
 }
 import repository_manager from "./src/model/service/RepositoryManager.ts"
+import Account from './src/.share/Account.ts';
 
 // registera middleware.
 server.use(cors(coursOptions));
+server.use(express.json());
 ///////////////////////////////////////////////
 ///////////////////////////////////////////////
 ///////////////////////////////////////////////
@@ -49,15 +51,41 @@ const events = [
 	}
 ];
 
-server.post("/api/website-visit-counter", async (req, res) => {
+server.post("/api/website-visit-counter", async (_req, res) => {
 	const number = await repository_manager.website_visit_counter.Get("");
-	if (number != undefined)
-		await repository_manager.website_visit_counter.Set("", number + 1);
+	// edge case whe the counter not found/exist in the database.
+	if (number === null) {
+		res.sendStatus(404).json({ error: "Counter not found somehow haha." });
+		return;
+	}
+	// no more worries.
+	await repository_manager.website_visit_counter.Set("", number + 1);
+	res.sendStatus(204); // 204 mean success with no response data.
 });
 
-server.get("/api/website-visit-counter", async (req, res) => {
+server.get("/api/website-visit-counter", async (_req, res) => {
 	const number = await repository_manager.website_visit_counter.Get("");
-	return res.json({ data: number });
+	res.json({ data: number });
+});
+
+server.post("/api/account/register", async (req, res) => {
+	const account = await repository_manager.account.Get(req.body);
+	// shall not create account if already exist.
+	if (account !== null) {
+		res.sendStatus(404);
+		return;
+	}
+	await repository_manager.account.Set(null, req.body);
+	res.sendStatus(204);
+});
+
+server.post("/api/account/login", async (req, res) => {
+	const account = await repository_manager.account.Get(req.body);
+	if (account === null) {
+		res.sendStatus(404);
+		return;
+	}
+	res.json(account);
 });
 
 server.get("/events", (req, res) => { // mock.
