@@ -1,13 +1,22 @@
+/// <reference types="node" />
 import IRepositoryData from "../interface/IRepositoryData.ts"
 import Account from "../../.share/Account.ts";
 import db from "../repository/MongoDB.ts"
+import { createHmac } from "node:crypto";
 
 const _collection = db?.collection<Account>("Users");
 
 export default class RepositoryAccount implements IRepositoryData<Account | null, Account> {
+	private _HelperSaltHash(raw: string): string {
+		const hmac = createHmac("sha256", `${process.env.secret}`);
+		const salted_key = hmac.update(`${process.env.salt}` + raw);
+		const hash = salted_key.digest("hex");
+		return hash;
+	}
 	async Get(k: Account | null): Promise<Account | null> {
 		if (k === null) throw EvalError("Empty key for retrieving the Account from the database");
-		const key = { email: k.email, password: k.password };
+		const hashed_key = this._HelperSaltHash(k.password!);
+		const key = { email: k.email, password: hashed_key };
 		const account = await _collection?.findOne(key) ?? null;
 		// hide password.
 		if (account != null)
@@ -21,16 +30,22 @@ export default class RepositoryAccount implements IRepositoryData<Account | null
 	}
 	async Set(k: Account | null, d: Account): Promise<void> {
 		// register.
+		// try not to modify the outer value.
+		// deep copy is hard?
+		const original_data_password = d.password;
+		d.password = this._HelperSaltHash(d.password!);
 		if (k === null) {
 			const key = { email: d.email };
 			const existing = await _collection?.findOne(key) ?? null;
 			// check existing.
 			if (existing !== null) throw EvalError("The account already exist.");
 			await _collection?.insertOne(d);
+			d.password = original_data_password;
 		}
 		// update.
 		else {
-			const key = { email: k.email, password: k.password };
+			const hashed_key = this._HelperSaltHash(k.password!);
+			const key = { email: k.email, password: hashed_key };
 			await _collection?.updateOne(key, { $set: d }, { upsert: true });
 		}
 	}
