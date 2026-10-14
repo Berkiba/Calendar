@@ -1,8 +1,14 @@
 
 import React, { useState } from "react";
 
-import{
+import { useNavigate } from "react-router-dom";
 
+import axios from "axios";
+
+import { createEvent } from "../../model/service/EventService";
+
+import{
+    Alert,
     Box,
     Button,
     Paper,
@@ -13,6 +19,10 @@ import{
 
 // Event form which is responsible for creating and configuring an event
 export default function EventForm(){
+
+    //react router navigation
+    const navigate = useNavigate();
+
     //state for each input field
     const [title, setTitle]             = useState("");
     const [date, setDate]               = useState("");
@@ -20,23 +30,56 @@ export default function EventForm(){
     const [endTime, setEndTime]         = useState("");
     const [location, setLocation]       = useState("");
     const [description, setDescription] = useState("");
+    const [saving, setSaving]           = useState(false);
+    const [error, setError]             = useState("");
 
-    //Runs when user submits form, preventDefault() stops browser from refreshing the page
-    function handleSubmit(event: React.SubmitEvent<HTMLFormElement>){
+    //called when user submits the form
+    async function handleSubmit(
+        event: React.SubmitEvent<HTMLFormElement>
+    ){
+        //prevent browser from refreshing
         event.preventDefault();
+        //clear previous error messages
+        setError("");
 
-        //create one event object
-        const newEvent = {
-            title,
-            date,
-            startTime,
-            endTime,
-            location,
-            description
+        //check that end time is after start time
+        if(startTime >= endTime){
+            setError("End time must be after start time");
+            return;
         }
 
-        //temp behavior until backend is implemented
-        console.log("Created event:", newEvent);
+        //disable submit button while saving
+        setSaving(true);
+
+        try{
+            
+            //send form data to backend
+            const createdEvent = await createEvent({
+                title: title.trim(),
+                date,
+                startTime,
+                endTime,
+                location: location.trim(),
+                description: description.trim()
+            });
+
+            //use id returned by the backend
+            navigate(`/events/${createdEvent.id}`);
+        }
+        catch(err){
+            //use backend's error msg if available
+            const message = 
+                axios.isAxiosError(err) &&
+                typeof err.response?.data?.error === "string" ?
+                err.response.data.error :
+                "Could not save event, check backend and MongoDB";
+            
+            setError(message);
+        }
+        finally{
+            //re-enable button when request finishes
+            setSaving(false);
+        }
     }
 
     return(
@@ -57,6 +100,12 @@ export default function EventForm(){
                 {/*Form container*/}
                 <Box component = "form" onSubmit={handleSubmit}>
                     <Stack spacing = {3}>
+                        {/* Display an error if the backend rejects the event */}
+                            {error &&(
+                                <Alert severity="error">
+                                    {error}
+                                </Alert>
+                            )}
                         {/*Each text field (event title, date, time, location, description)*/}
                         <TextField
                             label       = "Event title"
@@ -128,8 +177,9 @@ export default function EventForm(){
                             type        = "submit"
                             variant     = "contained"
                             size        = "large"
+                            disabled    = {saving}
                         >
-                            Create Event
+                            {saving ? "saving..." : "create event"}
                         </Button>
                     </Stack>
                 </Box>

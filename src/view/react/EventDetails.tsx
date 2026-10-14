@@ -6,7 +6,7 @@ import {
 	Stack,
 	Typography,
 } from "@mui/material";
-import { useLoaderData, useParams } from "react-router-dom";
+import { useLoaderData} from "react-router-dom";
 import { Event } from "../../model/interface/Event";
 
 // Event details shows info about one event
@@ -19,7 +19,7 @@ export default function EventDetails() {
 		return (
 			<Box sx={{ ml: "22vw", p: 4 }}>
 				<Typography variant="h4">
-					Event not found hejn  jejejej
+					Event not found
 				</Typography>
 			</Box>
 		)
