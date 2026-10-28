@@ -26,3 +26,15 @@ export async function createEvent(
 	return response.data;
 }
 
+//update existing event using its id
+//send updated event data to express backend
+export async function updateEvent(id: string, data: EventInput): Promise<Event>{
+
+	const response = await axios.put<Event>(
+		`/api/events/${encodeURIComponent(id)}`,
+		data
+	);
+
+	return response.data;
+}
+
