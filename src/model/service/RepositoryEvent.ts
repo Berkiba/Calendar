@@ -70,5 +70,14 @@ export default class RepositoryEvent{
         return await this.Get(id);
     }
 
+    async Delete(id: string): Promise<boolean>{
+
+        //find event by id and remove it from mongodb
+        const result = await this.collection().deleteOne({id});
+
+        //return true if an event was deleted, otherwise false
+        return result.deletedCount > 0;
+    }
+
 }
 

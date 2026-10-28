@@ -318,6 +318,37 @@ server.put("/api/events/:id", async (req, res) =>{
 
 });
 
+//DELETE /api/events/:id
+//deletes an existing event from mongodb using its id
+server.delete("/api/events/:id", async (req, res) =>{
+
+	try{
+		const id = String(req.params.id);
+
+		//delete event from mongodb
+		const deleted = await repository_manager.event.Delete(id);
+
+		//return 404 if event doesn't exist
+		if(!deleted){
+			res.status(404).json({
+				error: "event not found"
+			});
+			return;
+		}
+
+		//return success with no response body
+		res.sendStatus(204);
+	}
+	catch(error){
+		console.error("failed to delete event:", error);
+
+		res.status(500).json({
+			error: "could not delete event"
+		});
+	}
+});
+
+
 
 ///////////////////////////////////////////////
 ///////////////////////////////////////////////

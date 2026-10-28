@@ -38,3 +38,12 @@ export async function updateEvent(id: string, data: EventInput): Promise<Event>{
 	return response.data;
 }
 
+//delete existing event using its id
+//send delete request to express backend
+export async function deleteEvent(id: string): Promise<void>{
+
+	await axios.delete(
+		`/api/events/${encodeURIComponent(id)}`
+	);
+}
+
