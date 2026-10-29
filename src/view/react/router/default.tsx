@@ -10,21 +10,27 @@ export default createBrowserRouter([{
 	Component: Home,
 	children: [
 		{
-			index: true,
-			element: <Navigate to="/calendar" replace />
+			index: 		true,
+			element: 	<Navigate to="/calendar" replace />
 		},
 		{
-			path: "calendar",
-			Component: Calendar,
+			path: 		"calendar",
+			Component: 	Calendar,
 		},
 		{
-			path: "events/new",
-			Component: EventForm,
+			path: 		"events/new",
+			Component: 	EventForm,
 		},
 		{
-			path: "events/:id",
-			Component: EventDetails,
-			loader: loadEvent
+			//open the form with an existing event's info
+			path: 		"events/:id/edit",
+			Component:	EventForm,
+			loader:		loadEvent
+		},
+		{
+			path: 		"events/:id",
+			Component: 	EventDetails,
+			loader: 	loadEvent
 		},
 	],
 }

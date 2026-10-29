@@ -55,5 +55,29 @@ export default class RepositoryEvent{
         return event;
     }
 
+    //updates existing event using unique event id
+    async Update(id: string, data: EventInput): Promise<Event | null>{
+
+        //find event by id and update info
+        const result = await this.collection().updateOne({id}, {$set: data});
+
+        //return null if no event was found
+        if(result.matchedCount === 0){
+            return null;
+        }
+
+        //retreive updated event from mongodb
+        return await this.Get(id);
+    }
+
+    async Delete(id: string): Promise<boolean>{
+
+        //find event by id and remove it from mongodb
+        const result = await this.collection().deleteOne({id});
+
+        //return true if an event was deleted, otherwise false
+        return result.deletedCount > 0;
+    }
+
 }
 

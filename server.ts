@@ -206,6 +206,149 @@ server.post("/api/events", async (req, res) =>{
 	}
 });
 
+//PUT /api/events/:id
+//updates existing event into mongodb
+server.put("/api/events/:id", async (req, res) =>{
+
+	try{
+		const id = String(req.params.id);
+		const body = req.body;
+
+		//ensure that json object was supplied
+		if(typeof body !== "object"
+		   || body === null
+		   || Array.isArray(body)
+		){
+			res.status(400).json({
+				error: "invalid event data"
+			});
+			return;
+		}
+
+		const fields = [
+			"title"       ,
+			"date"        ,
+			"startTime"   ,
+			"endTime"     ,
+			"location"    ,
+			"description" ,
+		] as const;
+
+		//ensure every expected field is a string
+		const validFields = fields.every(
+			field => typeof body[field] === "string"
+		);
+
+		if(!validFields){
+			res.status(400).json({
+				error: "event fields must contain text"
+			});
+			return;
+		}
+
+		const eventData: EventInput = {
+			title 		: body.title.trim()      ,
+			date        : body.date              ,
+			startTime   : body.startTime         ,
+			endTime     : body.endTime           ,
+			location    : body.location.trim()   ,       
+			description : body.description.trim(),
+		};
+
+		//validate required event info
+		if(!eventData.title || !eventData.date){
+			res.status(400).json({
+				error: "title and date required"
+			});
+			return;
+		}
+
+		//validate the date
+		const parsedDate = new Date(
+			`${eventData.date}T00:00:00Z`
+		);
+
+		if(
+			!/^\d{4}-\d{2}-\d{2}$/.test(eventData.date)
+			|| Number.isNaN(parsedDate.getTime())
+			|| parsedDate.toISOString().slice(0, 10) !== eventData.date
+		){
+			res.status(400).json({
+				error: "invalid date"
+			});
+			return;
+		}
+
+		//validate time formats and ordering
+		const timePattern = /^([01]\d|2[0-3]):[0-5]\d$/;
+
+		if(
+			!timePattern.test(eventData.startTime)
+			|| !timePattern.test(eventData.endTime)
+			|| eventData.startTime >= eventData.endTime
+		){
+			res.status(400).json({
+				error: "invalid start or end time"
+			});
+			return;
+		}
+
+		//update the event in mongodb
+		const updatedEvent = await repository_manager.event.Update(id, eventData);
+
+		//return 404 if event doesn't exist
+		if(updatedEvent === null){
+			res.status(404).json({
+				error: "event not found"
+			});
+			return;
+		}
+
+		//return updated event
+		res.json(updatedEvent);
+	}
+
+	catch(error){
+		console.error("failed to update event: ", error);
+
+		res.status(500).json({
+			error: "could not update event"
+		});
+	}
+
+});
+
+//DELETE /api/events/:id
+//deletes an existing event from mongodb using its id
+server.delete("/api/events/:id", async (req, res) =>{
+
+	try{
+		const id = String(req.params.id);
+
+		//delete event from mongodb
+		const deleted = await repository_manager.event.Delete(id);
+
+		//return 404 if event doesn't exist
+		if(!deleted){
+			res.status(404).json({
+				error: "event not found"
+			});
+			return;
+		}
+
+		//return success with no response body
+		res.sendStatus(204);
+	}
+	catch(error){
+		console.error("failed to delete event:", error);
+
+		res.status(500).json({
+			error: "could not delete event"
+		});
+	}
+});
+
+
 
 ///////////////////////////////////////////////
 ///////////////////////////////////////////////

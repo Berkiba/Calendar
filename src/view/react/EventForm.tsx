@@ -1,11 +1,9 @@
 
 import React, { useState } from "react";
-
-import { useNavigate } from "react-router-dom";
-
+import { useLoaderData, useNavigate, useParams } from "react-router-dom";
+import type { Event } from "../../model/interface/Event";
 import axios from "axios";
-
-import { createEvent } from "../../model/service/EventService";
+import { createEvent, updateEvent } from "../../model/service/EventService";
 
 import{
     Alert,
@@ -23,13 +21,20 @@ export default function EventForm(){
     //react router navigation
     const navigate = useNavigate();
 
+    //retrieve existing event when editing
+    const { id }        = useParams();
+    const loadedEvent   = useLoaderData() as Event | undefined;
+
+    //check whether the form is creating or editing an event
+    const isEditing = id !== undefined;
+
     //state for each input field
-    const [title, setTitle]             = useState("");
-    const [date, setDate]               = useState("");
-    const [startTime, setStartTime]     = useState("");
-    const [endTime, setEndTime]         = useState("");
-    const [location, setLocation]       = useState("");
-    const [description, setDescription] = useState("");
+    const [title, setTitle]             = useState(loadedEvent?.title ?? "");
+    const [date, setDate]               = useState(loadedEvent?.date ?? "");
+    const [startTime, setStartTime]     = useState(loadedEvent?.startTime ?? "");
+    const [endTime, setEndTime]         = useState(loadedEvent?.endTime ?? "");
+    const [location, setLocation]       = useState(loadedEvent?.location ?? "");
+    const [description, setDescription] = useState(loadedEvent?.description ?? "");
     const [saving, setSaving]           = useState(false);
     const [error, setError]             = useState("");
 
@@ -54,17 +59,30 @@ export default function EventForm(){
         try{
             
             //send form data to backend
-            const createdEvent = await createEvent({
+            const eventData = {
                 title: title.trim(),
                 date,
                 startTime,
                 endTime,
                 location: location.trim(),
                 description: description.trim()
-            });
+            };
 
-            //use id returned by the backend
-            navigate(`/events/${createdEvent.id}`);
+            if(isEditing){
+                //update existing event in mongodb
+                const updatedEvent = await updateEvent(id!, eventData);
+
+                //return to updated event details page
+                navigate(`/events/${updatedEvent.id}`);
+            }
+            else{
+                //create new event in mongodb
+                const createdEvent = await createEvent(eventData);
+
+                //open newly created event details page
+                navigate(`/events/${createdEvent.id}`);
+            }
+
         }
         catch(err){
             //use backend's error msg if available
@@ -95,7 +113,7 @@ export default function EventForm(){
             <Paper elevation={3} sx = {{ p: 4 }}>
                 {/*Page title*/}
                 <Typography variant="h4" component="h1" gutterBottom>
-                    Create Event
+                    {isEditing ? "Edit Event" : "Create Event"}
                 </Typography>
                 {/*Form container*/}
                 <Box component = "form" onSubmit={handleSubmit}>
@@ -179,7 +197,7 @@ export default function EventForm(){
                             size        = "large"
                             disabled    = {saving}
                         >
-                            {saving ? "saving..." : "create event"}
+                            {saving ? "saving..." : isEditing ? "save changes" : "create event"}
                         </Button>
                     </Stack>
                 </Box>
