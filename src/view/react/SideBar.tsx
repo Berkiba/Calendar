@@ -1,8 +1,9 @@
 /// <reference types="vite/client" />
 import "../css/.GLOBAL.css";
 import "../css/SideBar.css";
-import { useRef } from "react";
+import { useContext, useRef } from "react";
 import { Link } from "react-router-dom";
+import { AccountContext } from "../../controller/AccountManager";
 
 /** 
  * Foldable, expandable side bar.
@@ -30,6 +31,8 @@ export default function SideBar() {
 		if (!backgroundRef.current?.classList.contains("hidden"))
 			helperToggle();
 	}
+
+	const {account} = useContext(AccountContext)!;
 	return (
 		<>
 			<nav ref={backgroundRef} className="side-bar hidden background" onClick={BackgroundOnClick}></nav>
@@ -37,9 +40,9 @@ export default function SideBar() {
 				<p className="arrow">{">"}</p>
 				<Link to="/calendar">Calendar</Link>
 				<Link to="/events/new">New Event</Link>
-				<Link to="/">PLACE_HOLDER</Link>
-				<Link to="/">PLACE_HOLDER</Link>
-				<Link to="/">PLACE_HOLDER</Link>
+				<Link to="/register">Register</Link>
+				<Link to="/login">Login</Link>
+				<Link to="/">{account?.Email}</Link>
 			</nav>
 		</>
 	);
