@@ -4,6 +4,8 @@ import EventForm from "../EventForm";
 import EventDetails from "../EventDetails";
 import Calendar from "../calendar";
 import { loadEvent } from "../../../controller/EventController";
+import Login from "../Login"
+import Register from "../Register"
 
 export default createBrowserRouter([{
 	path: "/",
@@ -31,6 +33,14 @@ export default createBrowserRouter([{
 			path: 		"events/:id",
 			Component: 	EventDetails,
 			loader: 	loadEvent
+		},
+		{
+			path: "login",
+			Component: Login,
+		},
+		{
+			path: "register",
+			Component: Register,
 		},
 	],
 }
