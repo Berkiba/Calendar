@@ -27,6 +27,7 @@ export default class RepositoryAccount implements IRepositoryData<Account | null
 			algorithm: "HS256",
 			expiresIn: "15m",
 		});
+		account.token = token;
 		account.password = null;
 		return account;
 	}
