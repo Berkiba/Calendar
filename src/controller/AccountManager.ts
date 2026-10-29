@@ -1,5 +1,11 @@
 import Account from "../.share/Account.ts";
 import axios from "axios"
+import { createContext, useContext } from "react";
+
+export const AccountContext = createContext<{
+	account: AccountManager | null;
+	setAccount: (account: AccountManager | null) => void;
+} | null>(null);
 
 /**
  * 
