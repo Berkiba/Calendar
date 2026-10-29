@@ -3,6 +3,10 @@ import IRepositoryData from "../interface/IRepositoryData.ts"
 import Account from "../../.share/Account.ts";
 import db from "../repository/MongoDB.ts"
 import { createHmac } from "node:crypto";
+import jwt from "jsonwebtoken";
+
+const jwtSecret = process.env.JWT_SECRET ?? "";
+if (!jwtSecret) throw new Error("JWT_SECRET is missing.");
 
 const _collection = db?.collection<Account>("Users");
 
@@ -18,9 +22,12 @@ export default class RepositoryAccount implements IRepositoryData<Account | null
 		const hashed_key = this._HelperSaltHash(k.password!);
 		const key = { email: k.email, password: hashed_key };
 		const account = await _collection?.findOne(key) ?? null;
-		// hide password.
-		if (account != null)
-			account.password = "";
+		if (account === null) return null;
+		const token = jwt.sign({ sub: account.email }, jwtSecret, {
+			algorithm: "HS256",
+			expiresIn: "15m",
+		});
+		account.password = null;
 		return account;
 	}
 	async BatchGet(_k: (Account | null)[]): Promise<Account[] | null> {
