@@ -2,6 +2,8 @@ import type { EventInput } from "./src/model/interface/Event.ts";
 
 
 import express from "express";
+import type { RequestHandler } from "express";
+import jwt from "jsonwebtoken";
 const server = express();
 import cors from "cors"
 const coursOptions = {
@@ -13,6 +15,16 @@ import repository_manager from "./src/model/service/RepositoryManager.ts"
 // registera middleware.
 server.use(cors(coursOptions));
 server.use(express.json());
+
+function HelperVerifyToken(token: string, email: string): boolean {
+    try {
+        const payload = jwt.verify(token, process.env.JWT_SECRET ?? "", { algorithms: ["HS256"] });
+        return payload.sub === email;
+    } catch {
+        return false;
+    }
+}
+
 ///////////////////////////////////////////////
 ///////////////////////////////////////////////
 ///////////////////////////////////////////////

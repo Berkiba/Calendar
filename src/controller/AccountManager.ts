@@ -1,5 +1,11 @@
 import Account from "../.share/Account.ts";
 import axios from "axios"
+import { createContext, useContext } from "react";
+
+export const AccountContext = createContext<{
+	account: AccountManager | null;
+	setAccount: (account: AccountManager | null) => void;
+} | null>(null);
 
 /**
  * 
@@ -20,7 +26,7 @@ export default class AccountManager {
 		// because member methods will check if required data exist before doing anything.
 		if (typeof json !== "object" || json === null)
 			throw TypeError("Invalid Account construct argument.");
-		this._account = { name: null, email: null, password: null };
+		this._account = { name: null, email: null, password: null, token: null };
 		this._account.name = "name" in json && typeof json.name === "string" ? json.name : null;
 		this._account.email = "email" in json && typeof json.email === "string" ? json.email : null;
 		this._account.password = "password" in json && typeof json.password === "string" ? json.password : null;
@@ -30,6 +36,7 @@ export default class AccountManager {
 	 */
 	get Name() { if (this._account.name === null) throw EvalError("Null name."); return this._account.name; }
 	get Email() { if (this._account.email === null) throw EvalError("Null email."); return this._account.email; }
+	get Token() { return this._account.token; }
 	/**
 	 * Member methods.
 	 */
@@ -53,7 +60,8 @@ export default class AccountManager {
 		if (this._isLogin === true) throw EvalError("Please logout before login again.");
 		this._CheckCredentialValid();
 		const response = await axios.post("/api/account/login", this._account);
-		if (response == null) return;
+		if (typeof response.data.token !== "string")
+			throw Error("Login response is missing a token.");
 		// overwrite / erase the password info with null from the backend.
 		this._account = response.data as Account;
 		this._isLogin = true;
