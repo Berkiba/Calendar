@@ -31,6 +31,19 @@ export default class RepositoryAccount implements IRepositoryData<Account | null
 		account.password = null;
 		return account;
 	}
+	//retrieve user role using their email
+	//existing account without role are treated as regular users
+	async GetRoleByEmail(email: string): Promise<"user" | "admin" | null>{
+		//find account in mongodb using verified email
+		const account = await _collection?.findOne({email});
+		//return null if account doesn't exist
+		if(!account){
+			return null;
+		}
+		//only a stored admin role gets admin permissions
+		return account.role === "admin" ? "admin" : "user";
+	}
+
 	async BatchGet(_k: (Account | null)[]): Promise<Account[] | null> {
 		// not sure how to implement checker to use the none-null attribute of Account to search in the database...
 		// so i disable this functionality for now.
@@ -47,14 +60,21 @@ export default class RepositoryAccount implements IRepositoryData<Account | null
 			const existing = await _collection?.findOne(key) ?? null;
 			// check existing.
 			if (existing !== null) throw EvalError("The account already exist.");
-			await _collection?.insertOne(d);
+			//new accounts always receive regular user permissions
+			//never trust a role supplied by frontend
+			await _collection?.insertOne({...d, role: "user", token: null});
 			d.password = original_data_password;
 		}
 		// update.
 		else {
 			const hashed_key = this._HelperSaltHash(k.password!);
 			const key = { email: k.email, password: hashed_key };
-			await _collection?.updateOne(key, { $set: d }, { upsert: true });
+			//only update allowed account info
+			await _collection?.updateOne(key, { $set:{  
+				name: 		d.name,
+				password:	d.password,
+			}
+			}, { upsert: false });
 		}
 	}
 	async BatchSet(_k: (Account | null)[], _d: Account[]): Promise<void> {

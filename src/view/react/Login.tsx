@@ -17,6 +17,8 @@ export default function Login() {
 			form.reset();
 			setMessage("Logged in.");
 		} catch {
+			console.error("Login failed:", Error);
+
 			setMessage("Login failed.");
 		}
 	}
