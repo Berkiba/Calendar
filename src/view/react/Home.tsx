@@ -23,19 +23,13 @@ export default function Home() {
 	const notification = (
 		location.state as { notification?: string } | null)?.notification;
 	
-	//keep the notification visible until it closes
-	const [notificationOpen, setNotificationOpen] 		= useState(false);
-	const [notificationMessage, setNotificationMessage] = useState("");
-	useEffect(() => {
-		if (location.pathname === "/" && notification === "event deleted successfully"){
-			setNotificationMessage(notification);
-			setNotificationOpen(true);
-		}
-	}, [notification, location.key, location.pathname]);
+	//only show delete messages on home page
+	const showDeleteNotification =
+		location.pathname === "/" && notification === "event deleted successfully";
 
 	//close notification and clear navigation state
 	function closeNotification(){
-		setNotificationOpen(false);
+		navigate("/", {replace: true, state: null});
 	}
 ;
 	const [searchResult, setSearchResult] = useState<number>();
@@ -80,17 +74,17 @@ export default function Home() {
 
 			{/*show notification after deleting event*/}
 			<Snackbar
-				open			 = {notificationOpen}
+				open			 = {showDeleteNotification}
 				autoHideDuration = {4000}
-				onClose			 = {() => setNotificationOpen(false)}
+				onClose			 = {closeNotification}
 				anchorOrigin	 = {{ vertical: "bottom", horizontal: "center" }}
 				>
 					<Alert
 						severity	= "success"
 						variant		= "filled"
-						onClose  	= {() => setNotificationOpen(false)}
+						onClose  	= {closeNotification}
 						>
-						{notificationMessage}
+						{notification}
 					</Alert>
 				</Snackbar>
 		</nav >
