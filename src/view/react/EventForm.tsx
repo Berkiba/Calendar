@@ -85,14 +85,14 @@ export default function EventForm(){
                 const updatedEvent = await updateEvent(id!, eventData, token);
 
                 //return to updated event details page
-                navigate(`/events/${updatedEvent.id}`);
+                navigate(`/events/${updatedEvent.id}`, {state: { notification: "event updated successfully"}});
             }
             else{
                 //create new event in mongodb
                 const createdEvent = await createEvent(eventData, token);
 
                 //open newly created event details page
-                navigate(`/events/${createdEvent.id}`);
+                navigate(`/events/${createdEvent.id}`,{state: { notification: "event created successfully"}});
             }
 
         }

@@ -10,8 +10,10 @@ import {
 	DialogContent,
 	DialogContentText,
 	DialogTitle,
+	Alert,
+	Snackbar
 } from "@mui/material";
-import { useLoaderData, useNavigate} from "react-router-dom";
+import { useLocation, useLoaderData, useNavigate} from "react-router-dom";
 import { Event } from "../../model/interface/Event";
 import { useContext, useState } from "react";
 import axios from "axios";
@@ -26,6 +28,13 @@ export default function EventDetails() {
 	const navigate = useNavigate();
 	//retrieve logged in account from shared context
 	const accountContext = useContext(AccountContext);
+	//only admins can edit or delete events
+	const isAdmin = accountContext?.account?.Role === "admin";
+	//retrieve success notification passed from EventForm
+	const location = useLocation();
+	//show notification when arriving after create or edit
+	const notification = ( location.state as { notification?: string } | null)?.notification;
+	const [notificationOpen, setNotificationOpen] = useState(Boolean(notification));
 	//state for delete confirmation dialog
 	const [deleteOpen, setDeleteOpen] 	= useState(false);
 	const [deleting, setDeleting]	  	= useState(false);
@@ -74,7 +83,7 @@ export default function EventDetails() {
 			await deleteEvent(event.id, token);
 
 			//return to home page after successful deletion
-			navigate("/");
+			navigate("/", {state: { notification: "event deleted successfully"}});
 		}
 		catch(err){
 			//display backend error if delete fails
@@ -126,7 +135,8 @@ export default function EventDetails() {
 							<strong>Description:</strong>       {event.description}
 						</Typography>
 
-						{/*Edit and delete buttons*/}
+						{/*Edit and delete buttons (only admins can see these and use them)*/}
+						{isAdmin && (
 						<Stack direction="row" spacing={2}>
 							<Button variant="contained" onClick={handleEdit}>
 								Edit
@@ -136,6 +146,7 @@ export default function EventDetails() {
 								Delete
 							</Button>
 						</Stack>
+						)}
 					</Stack>
 				</CardContent>
 			</Card>
@@ -180,6 +191,22 @@ export default function EventDetails() {
 					</Button>
 				</DialogActions>
 			</Dialog>
+			
+			{/*show success notification after creating or updating event*/}
+			<Snackbar
+				open			 = {notificationOpen}
+				autoHideDuration = {4000}
+				onClose			 = {() => setNotificationOpen(false)}
+				anchorOrigin	 = {{ vertical: "bottom", horizontal: "center" }}
+				>
+					<Alert
+						severity	= "success"
+						variant		= "filled"
+						onClose  	= {() => setNotificationOpen(false)}
+						>
+						{notification}
+					</Alert>
+				</Snackbar>
 		</Box>
 	)
 }
