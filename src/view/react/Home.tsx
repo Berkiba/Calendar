@@ -14,7 +14,7 @@ const mockCredentials = { name: "test_name", email: "test_email@ju.se", password
  * @returns Home page as React component.
  */
 export default function Home() {
-	const { account, setAccount } = useContext(AccountContext)!;
+	const { setAccount } = useContext(AccountContext)!;
 	
 	//get notification after deleting event
 	const location = useLocation();
