@@ -3,6 +3,7 @@ export type Account = {
 	email: string | null;
 	password: string | null;
 	token: string | null;
+	role?: "user" | "admin";
 }
 
 export default Account;

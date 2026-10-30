@@ -13,9 +13,10 @@ import {
 } from "@mui/material";
 import { useLoaderData, useNavigate} from "react-router-dom";
 import { Event } from "../../model/interface/Event";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import { deleteEvent } from "../../model/service/EventService";
+import { AccountContext } from "../../controller/AccountManager";
 
 // Event details shows info about one event
 export default function EventDetails() {
@@ -23,6 +24,8 @@ export default function EventDetails() {
 	const event    = useLoaderData() as Event | undefined;
 	//navigate to edit page for this event
 	const navigate = useNavigate();
+	//retrieve logged in account from shared context
+	const accountContext = useContext(AccountContext);
 	//state for delete confirmation dialog
 	const [deleteOpen, setDeleteOpen] 	= useState(false);
 	const [deleting, setDeleting]	  	= useState(false);
@@ -54,13 +57,21 @@ export default function EventDetails() {
 		if(!event){
 			return;
 		}
+		//retreive authentication token from logged in account
+		const token = accountContext?.account?.Token;
+
+		//prevent deletion if user is not logged in
+		if(!token){
+			setDeleteError("you must be logged in to delete events");
+			return;
+		}
 
 		setDeleting(true);
 		setDeleteError("");
 
 		try{
 			//remove event from mongodb through backend
-			await deleteEvent(event.id);
+			await deleteEvent(event.id, token);
 
 			//return to home page after successful deletion
 			navigate("/");

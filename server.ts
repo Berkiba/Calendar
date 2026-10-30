@@ -26,6 +26,91 @@ function HelperVerifyToken(token: string, email: string): boolean {
     }
 }
 
+//check whether the user is authenticated before allowing event changes
+const requireAuth: RequestHandler = (req, res, next) =>{
+
+	//get jwt token from request header
+	const authorization = req.headers.authorization;
+
+	//reject requests without bearer token
+	if(!authorization || !authorization.startsWith("Bearer ")){
+		res.status(401).json({ error: "You must be logged in" });
+		return;
+	}
+
+	const token = authorization.slice(7).trim();
+
+	try{
+		//verify token using existing jwt secret
+		const payload = jwt.verify(token, process.env.JWT_SECRET ?? "", {algorithms: ["HS256"]});
+
+		//make sure the token identifies an account
+		if(typeof payload === "string" || typeof payload.sub !== "string" || !payload.sub){
+			res.status(401).json({ error: "invalid authentication token" });
+
+			return;
+		}
+
+		//valid token, continue to event endpoint
+		next();
+	}
+	catch(error){
+		//reject expired or invalid tokens
+		res.status(401).json({ error: "invalid or expired authentication token" });
+	}
+};
+
+//middleware to check whether logged in user is an admin
+const requireAdmin: RequestHandler = async (req, res, next) =>{
+
+	//retrieve token already checked by requireAuth
+	const authorization = req.headers.authorization;
+
+	if(!authorization || !authorization.startsWith("Bearer ")){
+		res.status(401).json({ error: "you must be logged in" });
+		return;
+	}
+
+	try{
+		//retrieve email from verified token
+		const token   = authorization.slice(7).trim();
+		const payload = jwt.verify(
+			token,
+			process.env.JWT_SECRET ?? "",
+			{algorithms: ["HS256"]}
+		);
+
+		if(typeof payload === "string" || typeof payload.sub !== "string" || !payload.sub){
+			res.status(401).json({ error: "invalid authentication token" });
+			return;
+		}
+
+		//retrieve role from mongodb instead of trusting frontend data
+		const role = await repository_manager.account.GetRoleByEmail(payload.sub);
+
+		//account no longer exists
+		if(role === null){
+			res.status(401).json({ error: "account not found" });
+			return;
+		}
+
+		//regular users can't modify existing events
+		if(role !== "admin"){
+			res.status(403).json({ error: "admin permission required" });
+			return;
+		}
+
+		//admin is authorized to continue
+		next();
+	}
+
+	catch(error){
+		console.error("failed to verify admin:", error);
+		res.status(401).json({ error: "invalid or expired authentication token"});
+	}
+
+}
+
 ///////////////////////////////////////////////
 ///////////////////////////////////////////////
 ///////////////////////////////////////////////
@@ -119,7 +204,7 @@ server.get("/api/events/:id", async (req, res) =>{
 
 //POST /api/events
 //retrieves event data from EventForm.tsx, validates it and stores it in mongodb
-server.post("/api/events", async (req, res) =>{
+server.post("/api/events", requireAuth, async (req, res) =>{
 
 	try{
 		const body = req.body;
@@ -247,7 +332,7 @@ server.post("/api/events", async (req, res) =>{
 
 //PUT /api/events/:id
 //updates existing event into mongodb
-server.put("/api/events/:id", async (req, res) =>{
+server.put("/api/events/:id", requireAuth, requireAdmin, async (req, res) =>{
 
 	try{
 		const id = String(req.params.id);
@@ -359,7 +444,7 @@ server.put("/api/events/:id", async (req, res) =>{
 
 //DELETE /api/events/:id
 //deletes an existing event from mongodb using its id
-server.delete("/api/events/:id", async (req, res) =>{
+server.delete("/api/events/:id", requireAuth, requireAdmin, async (req, res) =>{
 
 	try{
 		const id = String(req.params.id);

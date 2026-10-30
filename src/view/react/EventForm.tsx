@@ -56,6 +56,15 @@ export default function EventForm(){
             return;
         }
 
+        //get authentication token from logged-in account
+        const token = accountContext?.account?.Token;
+
+        //user must be logged in to create or edit events
+        if(!token){
+            setError("you must be logged in to save events");
+            return;
+        }
+
         //disable submit button while saving
         setSaving(true);
 
@@ -73,14 +82,14 @@ export default function EventForm(){
 
             if(isEditing){
                 //update existing event in mongodb
-                const updatedEvent = await updateEvent(id!, eventData);
+                const updatedEvent = await updateEvent(id!, eventData, token);
 
                 //return to updated event details page
                 navigate(`/events/${updatedEvent.id}`);
             }
             else{
                 //create new event in mongodb
-                const createdEvent = await createEvent(eventData, accountContext?.account?.Token ?? undefined);
+                const createdEvent = await createEvent(eventData, token);
 
                 //open newly created event details page
                 navigate(`/events/${createdEvent.id}`);
