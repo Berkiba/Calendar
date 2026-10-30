@@ -18,10 +18,15 @@ export async function getEvent(id: string): Promise<Event> {
 //send new event to backend
 //express validates data and saves event through mongodb
 export async function createEvent(
-	data: EventInput
+	data: EventInput,
+	token?: string
 ): Promise<Event> {
 
-	const response = await axios.post<Event>("/api/events", data);
+	const response = await axios.post<Event>(
+		"/api/events",
+		data,
+		token ? { headers: { Authorization: `Bearer ${token}` } } : {}
+	);
 
 	return response.data;
 }

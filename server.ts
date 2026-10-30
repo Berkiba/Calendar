@@ -1,6 +1,7 @@
 import type { EventInput } from "./src/model/interface/Event.ts";
 
 
+import { sendEventCreatedEmail } from "./src/model/service/EmailNotification.ts"
 import express from "express";
 import type { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
@@ -205,6 +206,32 @@ server.post("/api/events", async (req, res) =>{
 
 		//save event to mongodb
 		const createdEvent = await repository_manager.event.Create(eventData);
+		
+		 // Send a confirmation only when a valid logged-in account is available.
+        // Email failure must not undo a successfully saved event.
+        const authorization = req.headers.authorization;
+        if (authorization?.startsWith("Bearer ")) {
+            try {
+                const token = authorization.slice("Bearer ".length).trim();
+                const payload = jwt.verify(token, process.env.JWT_SECRET ?? "", {
+                    algorithms: ["HS256"],
+                });
+
+                if (typeof payload !== "string" && typeof payload.sub === "string" && payload.sub) {
+                    try {
+                        await sendEventCreatedEmail(payload.sub, createdEvent);
+                    } catch (emailError) {
+                        console.error("[Email] Event was saved, but its confirmation email failed:", emailError);
+                    }
+                } else {
+                    console.warn("[Email] Event was saved, but notification was skipped because the token identity was invalid.");
+                }
+            } catch {
+                console.warn("[Email] Event was saved, but notification was skipped because the token is invalid or expired.");
+            }
+        } else {
+            console.log("[Email] Confirmation skipped because the event creator is not logged in.");
+        }
 
 		//return new event and generated id
 		res.status(201).json(createdEvent);
