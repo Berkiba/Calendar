@@ -17,14 +17,6 @@ import repository_manager from "./src/model/service/RepositoryManager.ts"
 server.use(cors(coursOptions));
 server.use(express.json());
 
-function HelperVerifyToken(token: string, email: string): boolean {
-    try {
-        const payload = jwt.verify(token, process.env.JWT_SECRET ?? "", { algorithms: ["HS256"] });
-        return payload.sub === email;
-    } catch {
-        return false;
-    }
-}
 
 //check whether the user is authenticated before allowing event changes
 const requireAuth: RequestHandler = (req, res, next) =>{
@@ -54,7 +46,7 @@ const requireAuth: RequestHandler = (req, res, next) =>{
 		//valid token, continue to event endpoint
 		next();
 	}
-	catch(error){
+	catch{
 		//reject expired or invalid tokens
 		res.status(401).json({ error: "invalid or expired authentication token" });
 	}
