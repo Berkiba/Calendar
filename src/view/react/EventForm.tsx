@@ -1,9 +1,10 @@
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useLoaderData, useNavigate, useParams } from "react-router-dom";
 import type { Event } from "../../model/interface/Event";
 import axios from "axios";
 import { createEvent, updateEvent } from "../../model/service/EventService";
+import { AccountContext } from "../../controller/AccountManager.ts";
 
 import{
     Alert,
@@ -17,6 +18,8 @@ import{
 
 // Event form which is responsible for creating and configuring an event
 export default function EventForm(){
+
+    const accountContext = useContext(AccountContext);
 
     //react router navigation
     const navigate = useNavigate();
@@ -77,7 +80,7 @@ export default function EventForm(){
             }
             else{
                 //create new event in mongodb
-                const createdEvent = await createEvent(eventData);
+                const createdEvent = await createEvent(eventData, accountContext?.account?.Token ?? undefined);
 
                 //open newly created event details page
                 navigate(`/events/${createdEvent.id}`);
