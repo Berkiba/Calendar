@@ -1,7 +1,8 @@
 /// <reference types="vite/client" />
 import "../css/.GLOBAL.css";
 import { useState, useEffect, useContext } from "react";
-import { Outlet } from "react-router-dom"
+import { Outlet, useLocation, useNavigate } from "react-router-dom"
+import { Alert, Snackbar } from "@mui/material";
 import SideBar from "./SideBar.tsx"
 import { LoadWebsiteVisitCounter, PostWebsiteVisitCounter } from "../../controller/LoadWebsiteVisitCounter.ts"
 import AccountManager, { AccountContext } from "../../controller/AccountManager.ts"
@@ -14,6 +15,28 @@ const mockCredentials = { name: "test_name", email: "test_email@ju.se", password
  */
 export default function Home() {
 	const { account, setAccount } = useContext(AccountContext)!;
+	
+	//get notification after deleting event
+	const location = useLocation();
+	const navigate = useNavigate();
+
+	const notification = (
+		location.state as { notification?: string } | null)?.notification;
+	
+	//keep the notification visible until it closes
+	const [notificationOpen, setNotificationOpen] 		= useState(false);
+	const [notificationMessage, setNotificationMessage] = useState("");
+	useEffect(() => {
+		if (location.pathname === "/" && notification === "event deleted successfully"){
+			setNotificationMessage(notification);
+			setNotificationOpen(true);
+		}
+	}, [notification, location.key, location.pathname]);
+
+	//close notification and clear navigation state
+	function closeNotification(){
+		setNotificationOpen(false);
+	}
 ;
 	const [searchResult, setSearchResult] = useState<number>();
 	useEffect(() => {
@@ -54,6 +77,22 @@ export default function Home() {
 						<button onClick={OnPressAccess}>Access mock account</button>
 			</nav >
 			<Outlet></Outlet>
+
+			{/*show notification after deleting event*/}
+			<Snackbar
+				open			 = {notificationOpen}
+				autoHideDuration = {4000}
+				onClose			 = {() => setNotificationOpen(false)}
+				anchorOrigin	 = {{ vertical: "bottom", horizontal: "center" }}
+				>
+					<Alert
+						severity	= "success"
+						variant		= "filled"
+						onClose  	= {() => setNotificationOpen(false)}
+						>
+						{notificationMessage}
+					</Alert>
+				</Snackbar>
 		</nav >
 	);
 }

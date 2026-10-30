@@ -37,6 +37,7 @@ export default class AccountManager {
 	get Name() { if (this._account.name === null) throw EvalError("Null name."); return this._account.name; }
 	get Email() { if (this._account.email === null) throw EvalError("Null email."); return this._account.email; }
 	get Token() { return this._account.token; }
+	get Role(): "user" | "admin" { return this._account.role === "admin" ? "admin" : "user";}
 	/**
 	 * Member methods.
 	 */
