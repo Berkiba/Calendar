@@ -1,76 +1,319 @@
+
 .calendar {
-	background-color:#6C584C;
-	padding: 50px;
-	margin: 50px;
+box-sizing: border-box;
+	width: min(1200px, calc(100% - 3rem));
+	margin: 2rem auto;
+	padding: clamp(1rem, 3vw, 2rem);
+	border: 1px solid #e7ddd4;
+	border-radius: 24px;
+	background: linear-gradient(145deg, #f7f2ed 0%, #eee4da 100%);
+	color: #302820;
+	box-shadow: 0 18px 50px rgba(58, 43, 32, 0.10);
 }
 
 .calendar-content {
 	display: grid;
-	grid-template-columns: minmax(280px, 1fr) minmax(300px, 1.2fr);
-	gap: 2rem;
+	grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.35fr);
+	gap: clamp(1rem, 2.5vw, 2rem);
 	align-items: start;
 }
 
 .calendar-picker,
 .calendar-events {
+	box-sizing: border-box;
 	min-width: 0;
-	padding: 1.25rem;
-	border-radius: 8px;
-	background-color: #fff;
-	color: #242424;
+	padding: clamp(1.1rem, 2.5vw, 1.75rem);
+	border: 1px solid rgba(108, 88, 76, 0.12);
+	border-radius: 18px;
+	background-color: #fffdfb;
+	color: #302820;
+	box-shadow: 0 6px 22px rgba(58, 43, 32, 0.06);
 }
 
-.calendar-events h2,
+.calendar-picker {
+	position: sticky;
+	top: 1.25rem;
+}
+
+.calendar-picker .MuiDateCalendar-root {
+	width: 100%;
+	max-width: 360px;
+	margin: 0 auto;
+}
+
+.calendar-picker .MuiPickersCalendarHeader-root {
+	padding-left: 8px;
+	padding-right: 8px;
+	margin-top: 4px;
+	margin-bottom: 8px;
+}
+
+.calendar-picker .MuiPickersCalendarHeader-label {
+	color: #4f4037;
+	font-size: 1rem;
+	font-weight: 700;
+}
+
+.calendar-picker .MuiDayCalendar-weekDayLabel {
+	color: #8a796d;
+	font-weight: 700;
+}
+
+.calendar-picker .MuiPickersDay-root {
+	border-radius: 10px;
+	font-weight: 500;
+	transition: background-color 140ms ease, color 140ms ease;
+}
+
+.calendar-picker .MuiPickersDay-root:hover {
+	background-color: #efe4da;
+}
+
+.calendar-picker .MuiPickersDay-root.Mui-selected {
+	background-color: #6c584c;
+	color: #fff;
+	font-weight: 700;
+}
+
+.calendar-picker .MuiPickersDay-root.Mui-selected:hover {
+	background-color: #4f4037;
+}
+
+.calendar-picker .MuiPickersDay-today:not(.Mui-selected) {
+	border-color: #a98467;
+	color: #6c584c;
+}
+
+.calendar-picker p[role="status"] {
+	min-height: 1.5rem;
+	margin: 0.75rem 0 0;
+	color: #6c584c;
+	font-size: 0.9rem;
+	line-height: 1.5;
+}
+
+.calendar-events h2 {
+	margin: 0 0 0.35rem;
+	color: #352920;
+	font-size: clamp(1.45rem, 2vw, 1.8rem);
+	letter-spacing: -0.03em;
+}
 .calendar-events h3 {
-	margin-top: 0;
+	margin: 1.75rem 0 0.8rem;
+	padding-top: 1.25rem;
+	border-top: 1px solid #eee4dc;
+	color: #4f4037;
+	font-size: 1.05rem;
+}
+
+.calendar-events > p {
+	color: #837468;
+	line-height: 1.55;
 }
 
 .calendar-event-list {
 	list-style: none;
-	margin: 0;
+	margin: 1rem 0 0;
 	padding: 0;
 	display: grid;
-	gap: 0.75rem;
+	gap: 0.8rem;
 }
 
 .calendar-event {
 	display: grid;
-	gap: 0.25rem;
-	padding: 0.85rem;
-	border: 1px solid #ded8d3;
-	border-left: 4px solid #6C584C;
-	border-radius: 6px;
+	gap: 0.35rem;
+	padding: 1rem 1.1rem;
+	border: 1px solid #eee4dc;
+	border-left: 4px solid #a98467;
+	border-radius: 12px;
+	background: #fff;
 	overflow-wrap: anywhere;
+	transition: border-color 140ms ease, box-shadow 140ms ease, transform 140ms ease;
+}
+
+.calendar-event:hover {
+	border-left-color: #6c584c;
+	box-shadow: 0 5px 16px rgba(58, 43, 32, 0.07);
+	transform: translateY(-1px);
 }
 
 .calendar-event-title {
+	width: fit-content;
 	color: #4f4037;
 	font-weight: 700;
+	line-height: 1.4;
+	text-decoration: none;
+	text-underline-offset: 3px;
+}
+
+.calendar-event-title:hover {
+	color: #8b6348;
 	text-decoration: underline;
 }
 
 .calendar-event-time,
 .calendar-event-date-time {
-	color: #555;
+	color: #8a796d;
 	font-size: 0.9rem;
+	font-variant-numeric: tabular-nums;
 }
 
 .calendar-event p {
 	margin: 0.25rem 0 0;
+	color: #6d6056;
+	line-height: 1.55;
 	white-space: pre-wrap;
 }
 
 .calendar-error {
+	padding: 0.8rem 1rem;
+	border: 1px solid #f3c7c3;
+	border-radius: 10px;
+	background: #fff4f2;
 	color: #b42318;
 }
 
 @media (max-width: 900px) {
 	.calendar {
+		width: calc(100% - 2rem);
+		margin: 1rem auto;
 		padding: 1rem;
-		margin: 1rem;
+		border-radius: 18px;
 	}
 
 	.calendar-content {
-		grid-template-columns: 1fr;
+		grid-template-columns: minmax(0, 1fr);
 	}
+
+	.calendar-picker {
+		position: static;
+	}
+
+	.calendar-picker .MuiDateCalendar-root {
+		max-width: 400px;
+	}
+}
+
+@media (max-width: 480px) {
+	.calendar {
+		width: calc(100% - 1rem);
+		margin: 0.5rem auto;
+		padding: 0.6rem;
+		border-radius: 14px;
+	}
+
+	.calendar-events h3 {
+	margin: 1.75rem 0 0.8rem;
+	padding-top: 1.25rem;
+	border-top: 1px solid #eee4dc;
+	color: #4f4037;
+	font-size: 1.05rem;
+}
+
+.calendar-events > p {
+	color: #837468;
+	line-height: 1.55;
+}
+
+.calendar-event-list {
+	list-style: none;
+	margin: 1rem 0 0;
+	padding: 0;
+	display: grid;
+	gap: 0.8rem;
+}
+
+.calendar-event {
+	display: grid;
+	gap: 0.35rem;
+	padding: 1rem 1.1rem;
+	border: 1px solid #eee4dc;
+	border-left: 4px solid #a98467;
+	border-radius: 12px;
+	background: #fff;
+	overflow-wrap: anywhere;
+	transition: border-color 140ms ease, box-shadow 140ms ease, transform 140ms ease;
+}
+
+.calendar-event:hover {
+	border-left-color: #6c584c;
+	box-shadow: 0 5px 16px rgba(58, 43, 32, 0.07);
+	transform: translateY(-1px);
+}
+
+.calendar-event-title {
+	width: fit-content;
+	color: #4f4037;
+	font-weight: 700;
+	line-height: 1.4;
+	text-decoration: none;
+	text-underline-offset: 3px;
+}
+
+.calendar-event-title:hover {
+	color: #8b6348;
+	text-decoration: underline;
+}
+
+.calendar-event-time,
+.calendar-event-date-time {
+	color: #8a796d;
+	font-size: 0.9rem;
+	font-variant-numeric: tabular-nums;
+}
+
+.calendar-event p {
+	margin: 0.25rem 0 0;
+	color: #6d6056;
+	line-height: 1.55;
+	white-space: pre-wrap;
+}
+
+.calendar-error {
+	padding: 0.8rem 1rem;
+	border: 1px solid #f3c7c3;
+	border-radius: 10px;
+	background: #fff4f2;
+	color: #b42318;
+}
+
+@media (max-width: 900px) {
+	.calendar {
+		width: calc(100% - 2rem);
+		margin: 1rem auto;
+		padding: 1rem;
+		border-radius: 18px;
+	}
+
+	.calendar-content {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.calendar-picker {
+		position: static;
+	}
+
+	.calendar-picker .MuiDateCalendar-root {
+		max-width: 400px;
+	}
+}
+
+@media (max-width: 480px) {
+	.calendar {
+		width: calc(100% - 1rem);
+		margin: 0.5rem auto;
+		padding: 0.6rem;
+		border-radius: 14px;
+	}
+
+		.calendar-picker,
+	.calendar-events {
+		padding: 1rem;
+		border-radius: 12px;
+	}
+
+	.calendar-picker .MuiDateCalendar-root {
+		min-width: 0;
+	}
+}
 }
